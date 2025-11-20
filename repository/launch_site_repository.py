@@ -26,6 +26,17 @@ class LaunchSiteRepository:
         self.disconnect()
         return site
 
+    def add(self, site):
+        self.connect()
+        self.cursor.execute("""
+            insert into launch_sites (name, location)
+            values (?, ?)""",
+         [site.name, site.location])
+        site.id = self.cursor.lastrowid
+        self.connection.commit()
+        self.disconnect()
+        return site
+
     def update(self, site):
         self.connect()
         self.cursor.execute("""

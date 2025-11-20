@@ -19,8 +19,8 @@ class LaunchRepository:
     def save(self, launch):
         self.connect()
         self.cursor.execute("""
-            insert into launches (name, angle, max_height, rocket_id)
-            values (?, ?, ?, ?)""",
+               insert into launches (name, angle, max_height, rocket_id, velocity)
+            values (?, ?, ?, ?,?)""",
          [launch.name, launch.angle, launch.max_height, launch.rocket_id])
         launch.id = self.cursor.lastrowid
         self.connection.commit()
@@ -31,8 +31,8 @@ class LaunchRepository:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         cursor.execute("""
-               insert into launches (name, angle, max_height, rocket_id)
-            values (?, ?, ?, ?)""",
+               insert into launches (name, angle, max_height, rocket_id, velocity)
+            values (?, ?, ?, ?,?)""",
            [launch.name, launch.angle, launch.max_height, launch.rocket_id])
         conn.commit()
         conn.close()

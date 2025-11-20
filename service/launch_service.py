@@ -1,30 +1,33 @@
 from repository.launch_repository import LaunchRepository
+from model.launch import Launch
 
 class LaunchService:
     launch_repository = LaunchRepository()
+
+    @classmethod
+    def add_launch(cls,name, rocket_id, site_id, angle, velocity):
+        launch = Launch(
+            name = name,
+            launch_id=None,
+            rocket_id=rocket_id,
+            site_id=site_id,
+            angle=angle,
+            velocity=velocity,
+            range_=None,
+            max_height=None
+        )
+
+        return cls.launch_repository.save(launch)
 
     @classmethod
     def save(cls, launch):
         return cls.launch_repository.save(launch)
 
     @classmethod
-    def add(cls, launch):
-        return cls.launch_repository.add(launch)
-
-    @classmethod
     def update(cls, launch):
         launch_result = cls.launch_repository.find_by_id(launch.launch_id)
         if launch_result:
             return cls.launch_repository.update(launch)
-        else:
-            raise Exception("Launch Not Found !!!")
-
-    @classmethod
-    def delete(cls, launch_id):
-        launch = cls.launch_repository.find_by_id(launch_id)
-        if launch:
-            cls.launch_repository.delete(launch_id)
-            return launch
         else:
             raise Exception("Launch Not Found !!!")
 
