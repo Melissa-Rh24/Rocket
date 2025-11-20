@@ -3,40 +3,47 @@ from tkinter import messagebox
 
 class LaunchSiteView:
     def __init__(self, site_service):
-        self.service = site_service
+        self.site_service = site_service
 
     def show(self):
         self.window = tk.Tk()
-        self.window.title("launch site management")
+        self.window.title("Launch Site Management")
+        self.window.geometry("580x350")
+        self.window.resizable(False, False)
 
-        tk.Label(self.window, text="name").grid(row=0, column=0)
-        tk.Label(self.window, text="location").grid(row=1, column=0)
 
-        self.name_entry = tk.Entry(self.window)
-        self.location_entry = tk.Entry(self.window)
+        tk.Label(self.window, text="Launch Site Information", font=("Arial", 13, "bold")).grid(
+            row=0, column=0, columnspan=2, pady=15
+        )
 
-        self.name_entry.grid(row=0, column=1)
-        self.location_entry.grid(row=1, column=1)
 
-        tk.Button(self.window, text="add site", command=self.add_site).grid(row=2, column=0, columnspan=2)
-        tk.Button(self.window, text="list sites", command=self.list_sites).grid(row=3, column=0, columnspan=2)
+        tk.Label(self.window, text="Site Name:").grid(row=1, column=0, padx=20, pady=8, sticky="e")
+        tk.Label(self.window, text="Location:").grid(row=2, column=0, padx=20, pady=8, sticky="e")
 
-        self.text_area = tk.Text(self.window, width=50, height=10)
-        self.text_area.grid(row=4, column=0, columnspan=2)
+        self.name_entry = tk.Entry(self.window, width=35)
+        self.location_entry = tk.Entry(self.window, width=35)
+
+        self.name_entry.grid(row=1, column=1, pady=8)
+        self.location_entry.grid(row=2, column=1, pady=8)
+
+        btn_frame = tk.Frame(self.window)
+        btn_frame.grid(row=4, column=0, columnspan=2, pady=35)
+
+        tk.Button(btn_frame, text="Add Site", width=14, command=self.add_site).pack(side="left", padx=12)
+
 
         self.window.mainloop()
 
     def add_site(self):
-        try:
-            name = self.name_entry.get()
-            location = self.location_entry.get()
-            site = self.service.create_site(name, location)
-            messagebox.showinfo("success", f"site added with id {site.site_id}")
-        except Exception as e:
-            messagebox.showerror("error", str(e))
+        name = self.name_entry.get()
+        location = self.location_entry.get()
 
-    def list_sites(self):
-        sites = self.service.get_all_sites()
-        self.text_area.delete('1.0', tk.END)
-        for s in sites:
-            self.text_area.insert(tk.END, f"id: {s.site_id}, name: {s.name}, location: {s.location}\n")
+        if not name or not location:
+            messagebox.showerror("Error", "Please fill all fields.")
+            return
+
+        self.site_service.add_site(name, location)
+        messagebox.showinfo("Success", "Launch site added successfully!")
+        self.name_entry.delete(0, tk.END)
+        self.location_entry.delete(0, tk.END)
+

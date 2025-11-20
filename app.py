@@ -11,9 +11,9 @@ def main():
     site = LaunchSiteRepository()
     launch = LaunchRepository()
 
-    rocket_service = RocketService(rocket)
-    site_service = LaunchSiteService(site)
-    launch_service = LaunchService(launch)
+    rocket_service = RocketService()
+    site_service = LaunchSiteService()
+    launch_service = LaunchService()
 
     login_view = LoginView(rocket_service, site_service, launch_service)
     login_view.show()

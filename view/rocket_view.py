@@ -3,48 +3,62 @@ from tkinter import messagebox
 
 class RocketView:
     def __init__(self, rocket_service):
-        self.service = rocket_service
+        self.rocket_service = rocket_service
 
     def show(self):
         self.window = tk.Tk()
-        self.window.title("rocket management")
+        self.window.title("Rocket Management")
+        self.window.geometry("580x380")
+        self.window.resizable(False, False)
 
-        tk.Label(self.window, text="name").grid(row=0, column=0)
-        tk.Label(self.window, text="mass").grid(row=1, column=0)
-        tk.Label(self.window, text="fuel capacity").grid(row=2, column=0)
-        tk.Label(self.window, text="max speed").grid(row=3, column=0)
 
-        self.name_entry = tk.Entry(self.window)
-        self.mass_entry = tk.Entry(self.window)
-        self.fuel_entry = tk.Entry(self.window)
-        self.speed_entry = tk.Entry(self.window)
+        title = tk.Label(self.window, text="Rocket Information", font=("Arial", 13, "bold"))
+        title.grid(row=0, column=0, columnspan=2, pady=15)
 
-        self.name_entry.grid(row=0, column=1)
-        self.mass_entry.grid(row=1, column=1)
-        self.fuel_entry.grid(row=2, column=1)
-        self.speed_entry.grid(row=3, column=1)
 
-        tk.Button(self.window, text="add rocket", command=self.add_rocket).grid(row=4, column=0, columnspan=2)
-        tk.Button(self.window, text="list rockets", command=self.list_rockets).grid(row=5, column=0, columnspan=2)
+        tk.Label(self.window, text="Rocket Name:").grid(row=1, column=0, padx=20, pady=8, sticky="e")
+        tk.Label(self.window, text="Mass (kg):").grid(row=2, column=0, padx=20, pady=8, sticky="e")
+        tk.Label(self.window, text="Fuel Capacity (L):").grid(row=3, column=0, padx=20, pady=8, sticky="e")
+        tk.Label(self.window, text="Max Speed (m/s):").grid(row=4, column=0, padx=20, pady=8, sticky="e")
 
-        self.text_area = tk.Text(self.window, width=50, height=10)
-        self.text_area.grid(row=6, column=0, columnspan=2)
+
+        self.name_entry = tk.Entry(self.window, width=35)
+        self.mass_entry = tk.Entry(self.window, width=35)
+        self.fuel_entry = tk.Entry(self.window, width=35)
+        self.speed_entry = tk.Entry(self.window, width=35)
+
+        self.name_entry.grid(row=1, column=1, pady=8)
+        self.mass_entry.grid(row=2, column=1, pady=8)
+        self.fuel_entry.grid(row=3, column=1, pady=8)
+        self.speed_entry.grid(row=4, column=1, pady=8)
+
+
+        button_frame = tk.Frame(self.window)
+        button_frame.grid(row=6, column=0, columnspan=2, pady=30)
+
+        tk.Button(button_frame, text="Add Rocket", width=14, command=self.add_rocket).pack(side="left", padx=12)
+
 
         self.window.mainloop()
 
-    def add_rocket(self):
-        try:
-            name = self.name_entry.get()
-            mass = float(self.mass_entry.get())
-            fuel = float(self.fuel_entry.get())
-            speed = float(self.speed_entry.get())
-            rocket = self.service.create_rocket(name, mass, fuel, speed)
-            messagebox.showinfo("success", f"rocket added with id {rocket.rocket_id}")
-        except Exception as e:
-            messagebox.showerror("error", str(e))
 
-    def list_rockets(self):
-        rockets = self.service.get_all_rockets()
-        self.text_area.delete('1.0', tk.END)
-        for r in rockets:
-            self.text_area.insert(tk.END, f"id: {r.rocket_id}, name: {r.name}, mass: {r.mass}, fuel: {r.fuel_capacity}, speed: {r.max_speed}\n")
+    def add_rocket(self):
+        name = self.name_entry.get()
+        mass = self.mass_entry.get()
+        fuel = self.fuel_entry.get()
+        speed = self.speed_entry.get()
+
+        if not name or not mass or not fuel or not speed:
+            messagebox.showerror("Error", "Please fill all fields.")
+            return
+
+        self.rocket_service.add_rocket(name, mass, fuel, speed)
+        messagebox.showinfo("Success", "Rocket added successfully!")
+        self.clear_inputs()
+
+
+    def clear_inputs(self):
+        self.name_entry.delete(0, tk.END)
+        self.mass_entry.delete(0, tk.END)
+        self.fuel_entry.delete(0, tk.END)
+        self.speed_entry.delete(0, tk.END)

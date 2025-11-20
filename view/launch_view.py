@@ -2,63 +2,71 @@ import tkinter as tk
 from tkinter import messagebox
 
 class LaunchView:
-    def __init__(self, launch_service, rocket_service, site_service):
+    def __init__(self, launch_service):
         self.launch_service = launch_service
-        self.rocket_service = rocket_service
-        self.site_service = site_service
 
     def show(self):
         self.window = tk.Tk()
-        self.window.title("launch management")
+        self.window.title("Launch Management")
+        self.window.geometry("620x430")
+        self.window.resizable(False, False)
 
-        tk.Label(self.window, text="rocket id").grid(row=0, column=0)
-        tk.Label(self.window, text="site id").grid(row=1, column=0)
-        tk.Label(self.window, text="angle").grid(row=2, column=0)
-        tk.Label(self.window, text="velocity").grid(row=3, column=0)
-        tk.Label(self.window, text="range").grid(row=4, column=0)
-        tk.Label(self.window, text="max height").grid(row=5, column=0)
+        tk.Label(self.window, text="Launch Information", font=("Arial", 13, "bold")).grid(
+            row=0, column=0, columnspan=2, pady=15
+        )
 
-        self.rocket_entry = tk.Entry(self.window)
-        self.site_entry = tk.Entry(self.window)
-        self.angle_entry = tk.Entry(self.window)
-        self.velocity_entry = tk.Entry(self.window)
-        self.range_entry = tk.Entry(self.window)
-        self.height_entry = tk.Entry(self.window)
 
-        self.rocket_entry.grid(row=0, column=1)
-        self.site_entry.grid(row=1, column=1)
-        self.angle_entry.grid(row=2, column=1)
-        self.velocity_entry.grid(row=3, column=1)
-        self.range_entry.grid(row=4, column=1)
-        self.height_entry.grid(row=5, column=1)
+        tk.Label(self.window, text="Rocket ID:").grid(row=1, column=0, padx=20, pady=8, sticky="e")
+        tk.Label(self.window, text="Launch Site ID:").grid(row=2, column=0, padx=20, pady=8, sticky="e")
+        tk.Label(self.window, text="Angle (°):").grid(row=3, column=0, padx=20, pady=8, sticky="e")
+        tk.Label(self.window, text="Velocity (m/s):").grid(row=4, column=0, padx=20, pady=8, sticky="e")
+        tk.Label(self.window, text="Range :").grid(row=5,column=0, padx=20, pady=8, sticky="e")
+        tk.Label(self.window, text="Max Height (m):").grid(row=6,column=0, padx=20, pady=8, sticky="e")
 
-        tk.Button(self.window, text="add launch", command=self.add_launch).grid(row=6, column=0, columnspan=2)
-        tk.Button(self.window, text="list launches", command=self.list_launches).grid(row=7, column=0, columnspan=2)
 
-        self.text_area = tk.Text(self.window, width=60, height=15)
-        self.text_area.grid(row=8, column=0, columnspan=2)
+        self.rocket_id_entry = tk.Entry(self.window, width=35)
+        self.site_id_entry = tk.Entry(self.window, width=35)
+        self.angle_entry = tk.Entry(self.window, width=35)
+        self.velocity_entry = tk.Entry(self.window, width=35)
+        self.range = tk.Entry(self.window, width=35)
+        self.max_height = tk.Entry(self.window, width=35)
+
+
+
+
+        self.rocket_id_entry.grid(row=1, column=1, pady=8)
+        self.site_id_entry.grid(row=2, column=1, pady=8)
+        self.angle_entry.grid(row=3, column=1, pady=8)
+        self.velocity_entry.grid(row=4, column=1, pady=8)
+        self.range.grid(row=5, column=1, pady=8)
+        self.max_height.grid(row=6, column=1, pady=8)
+
+
+        btn_frame = tk.Frame(self.window)
+        btn_frame.grid(row=6, column=0, columnspan=2, pady=35)
+
+        tk.Button(btn_frame, text="Add Launch", width=14, command=self.add_launch).pack(side="left", padx=12)
+
 
         self.window.mainloop()
 
     def add_launch(self):
-        try:
-            rocket_id = int(self.rocket_entry.get())
-            site_id = int(self.site_entry.get())
-            angle = float(self.angle_entry.get())
-            velocity = float(self.velocity_entry.get())
-            range_ = float(self.range_entry.get())
-            max_height = float(self.height_entry.get())
-            launch = self.launch_service.create_launch(rocket_id, site_id, angle, velocity, range_, max_height)
-            messagebox.showinfo("success", f"launch added with id {launch.launch_id}")
-        except Exception as e:
-            messagebox.showerror("error", str(e))
+        rocket_id = self.rocket_id_entry.get()
+        site_id = self.site_id_entry.get()
+        angle = self.angle_entry.get()
+        velocity = self.velocity_entry.get()
 
-    def list_launches(self):
-        launches = self.launch_service.get_all_launches()
-        self.text_area.delete('1.0', tk.END)
-        for l in launches:
-            self.text_area.insert(
-                tk.END,
-                f"id: {l.launch_id}, rocket_id: {l.rocket_id}, site_id: {l.site_id}, "
-                f"angle: {l.angle}, velocity: {l.velocity}, range: {l.range}, max_height: {l.max_height}\n"
-            )
+        if not rocket_id or not site_id or not angle or not velocity:
+            messagebox.showerror("Error", "Please fill all fields.")
+            return
+
+        self.launch_service.add_launch(rocket_id, site_id, angle, velocity)
+        messagebox.showinfo("Success", "Launch added successfully!")
+        self.clear_inputs()
+
+    def clear_inputs(self):
+        self.rocket_id_entry.delete(0, tk.END)
+        self.site_id_entry.delete(0, tk.END)
+        self.angle_entry.delete(0, tk.END)
+        self.velocity_entry.delete(0, tk.END)
+

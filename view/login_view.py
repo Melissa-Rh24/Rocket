@@ -12,8 +12,12 @@ class LoginView:
     def show(self):
         self.window = tk.Tk()
         self.window.title("login view")
+        self.window.geometry("300x250")
 
-        tk.Label(self.window, text="welcome to rocket launch management").pack(pady=10)
+        tk.Label(self.window, text="welcome to rocket data management").pack(pady=20)
+
+        btn_frame = tk.Frame(self.window)
+        btn_frame.pack(pady=10)
 
         tk.Button(self.window, text="rocket management", width=30, command=self.open_rocket_view).pack(pady=5)
         tk.Button(self.window, text="launch site management", width=30, command=self.open_site_view).pack(pady=5)
@@ -34,5 +38,5 @@ class LoginView:
 
     def open_launch_view(self):
         self.window.destroy()
-        launch_view = LaunchView(self.launch_service, self.rocket_service, self.site_service)
+        launch_view = LaunchView(self.launch_service)
         launch_view.show()
