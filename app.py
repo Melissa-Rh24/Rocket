@@ -6,6 +6,7 @@ from service.launch_site_service import LaunchSiteService
 from service.launch_service import LaunchService
 from view.login_view import LoginView
 
+
 def main():
     rocket = RocketRepository()
     site = LaunchSiteRepository()
@@ -17,6 +18,7 @@ def main():
 
     login_view = LoginView(rocket_service, site_service, launch_service)
     login_view.show()
+
 
 if __name__ == "__main__":
     main()

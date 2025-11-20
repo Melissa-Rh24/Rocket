@@ -41,7 +41,6 @@ class RocketView:
 
         self.window.mainloop()
 
-
     def add_rocket(self):
         name = self.name_entry.get()
         mass = self.mass_entry.get()
@@ -52,10 +51,15 @@ class RocketView:
             messagebox.showerror("Error", "Please fill all fields.")
             return
 
-        self.rocket_service.add_rocket(name, mass, fuel, speed)
-        messagebox.showinfo("Success", "Rocket added successfully!")
-        self.clear_inputs()
+        from model.rocket import Rocket
+        rocket = Rocket(name=name, mass=mass, fuel_capacity=fuel, max_speed=speed)
 
+        try:
+            self.rocket_service.add(rocket)
+            messagebox.showinfo("Success", "Rocket added successfully!")
+            self.clear_inputs()
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
 
     def clear_inputs(self):
         self.name_entry.delete(0, tk.END)

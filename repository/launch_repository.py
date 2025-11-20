@@ -4,6 +4,10 @@ from model.launch_site import LaunchSite
 
 
 class LaunchRepository:
+
+    def __init__(self, db_path="database/init.db"):
+        self.db_path = db_path
+
     def connect(self):
         self.connection = sqlite3.connect("rocket.db")
         self.cursor = self.connection.cursor()
@@ -22,6 +26,17 @@ class LaunchRepository:
         self.connection.commit()
         self.disconnect()
         return launch
+
+    def add(self, launch):
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("""
+               insert into launches (name, angle, max_height, rocket_id)
+            values (?, ?, ?, ?)""",
+           [launch.name, launch.angle, launch.max_height, launch.rocket_id])
+        conn.commit()
+        conn.close()
+        return f"Launch '{launch.name}' added successfully."
 
     def update(self, launch):
         self.connect()

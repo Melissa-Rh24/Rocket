@@ -8,6 +8,10 @@ class LaunchService:
         return cls.launch_repository.save(launch)
 
     @classmethod
+    def add(cls, launch):
+        return cls.launch_repository.add(launch)
+
+    @classmethod
     def update(cls, launch):
         launch_result = cls.launch_repository.find_by_id(launch.launch_id)
         if launch_result:

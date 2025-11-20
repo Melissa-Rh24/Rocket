@@ -4,6 +4,9 @@ from model.rocket import Rocket
 
 class RocketRepository:
 
+    def __init__(self, db_path="database/init.db"):
+        self.db_path = db_path
+
     def connect(self):
         self.connection = sqlite3.connect("rocket.db")
         self.cursor = self.connection.cursor()
@@ -22,8 +25,15 @@ class RocketRepository:
         self.connection.commit()
         self.disconnect()
 
-    def add(self, rocket):
-        self.rocket.append(rocket)
+    def add(self,rocket):
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("""
+            insert into rockets (name, mass, fuel_capacity, max_speed)
+            values (?, ?, ?, ?)
+        """, (rocket.name, rocket.mass, rocket.fuel_capacity, rocket.max_speed))
+        conn.commit()
+        conn.close()
         return f"Rocket '{rocket.name}' added successfully."
 
 

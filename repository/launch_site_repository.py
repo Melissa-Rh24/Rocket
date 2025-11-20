@@ -3,6 +3,10 @@ from model.launch_site import LaunchSite
 
 
 class LaunchSiteRepository:
+
+    def __init__(self, db_path="database/init.db"):
+        self.db_path = db_path
+
     def connect(self):
         self.connection = sqlite3.connect("rocket.db")
         self.cursor = self.connection.cursor()
