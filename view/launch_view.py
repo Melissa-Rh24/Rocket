@@ -8,7 +8,7 @@ class LaunchView:
     def show(self):
         self.window = tk.Tk()
         self.window.title("Launch Management")
-        self.window.geometry("620x430")
+        self.window.geometry("480x380")
         self.window.resizable(False, False)
 
         tk.Label(self.window, text="Launch Information", font=("Arial", 13, "bold")).grid(
@@ -21,7 +21,6 @@ class LaunchView:
         tk.Label(self.window, text="Angle (°):").grid(row=3, column=0, padx=20, pady=8, sticky="e")
         tk.Label(self.window, text="Velocity (m/s):").grid(row=4, column=0, padx=20, pady=8, sticky="e")
         tk.Label(self.window, text="Range :").grid(row=5,column=0, padx=20, pady=8, sticky="e")
-        tk.Label(self.window, text="Max Height (m):").grid(row=6,column=0, padx=20, pady=8, sticky="e")
 
 
         self.rocket_id_entry = tk.Entry(self.window, width=35)
@@ -29,7 +28,6 @@ class LaunchView:
         self.angle_entry = tk.Entry(self.window, width=35)
         self.velocity_entry = tk.Entry(self.window, width=35)
         self.range = tk.Entry(self.window, width=35)
-        self.max_height = tk.Entry(self.window, width=35)
 
 
 
@@ -39,13 +37,15 @@ class LaunchView:
         self.angle_entry.grid(row=3, column=1, pady=8)
         self.velocity_entry.grid(row=4, column=1, pady=8)
         self.range.grid(row=5, column=1, pady=8)
-        self.max_height.grid(row=6, column=1, pady=8)
 
 
         btn_frame = tk.Frame(self.window)
         btn_frame.grid(row=6, column=0, columnspan=2, pady=35)
 
         tk.Button(btn_frame, text="Add Launch", width=14, command=self.add_launch).pack(side="left", padx=12)
+        tk.Button(btn_frame, text="Delete Launch", width=14, command=self.add_launch).pack(side="left", padx=12)
+        tk.Button(btn_frame, text="Update Launch", width=14, command=self.add_launch).pack(side="left", padx=12)
+
 
 
         self.window.mainloop()

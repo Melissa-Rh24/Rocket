@@ -4,7 +4,7 @@ from model.rocket import Rocket
 
 class RocketRepository:
 
-    def __init__(self, db_path="database/init.db"):
+    def __init__(self, db_path="database/rocket.db"):
         self.db_path = db_path
 
     def connect(self):

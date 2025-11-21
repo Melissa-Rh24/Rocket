@@ -8,7 +8,7 @@ class LaunchSiteView:
     def show(self):
         self.window = tk.Tk()
         self.window.title("Launch Site Management")
-        self.window.geometry("580x350")
+        self.window.geometry("400x250")
         self.window.resizable(False, False)
 
 
@@ -30,6 +30,11 @@ class LaunchSiteView:
         btn_frame.grid(row=4, column=0, columnspan=2, pady=35)
 
         tk.Button(btn_frame, text="Add Site", width=14, command=self.add_site).pack(side="left", padx=12)
+        tk.Button(btn_frame, text="Delete Site", width=14, command=self.add_site).pack(side="left", padx=12)
+        tk.Button(btn_frame, text="Update Site", width=14, command=self.add_site).pack(side="left", padx=12)
+
+
+
 
 
         self.window.mainloop()

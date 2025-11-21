@@ -8,7 +8,7 @@ class RocketView:
     def show(self):
         self.window = tk.Tk()
         self.window.title("Rocket Management")
-        self.window.geometry("580x380")
+        self.window.geometry("450x320")
         self.window.resizable(False, False)
 
 
@@ -37,6 +37,10 @@ class RocketView:
         button_frame.grid(row=6, column=0, columnspan=2, pady=30)
 
         tk.Button(button_frame, text="Add Rocket", width=14, command=self.add_rocket).pack(side="left", padx=12)
+        tk.Button(button_frame, text="Delete Rocket", width=14, command=self.add_rocket).pack(side="left", padx=12)
+        tk.Button(button_frame, text="Update Rocket", width=14, command=self.add_rocket).pack(side="left", padx=12)
+
+
 
 
         self.window.mainloop()
